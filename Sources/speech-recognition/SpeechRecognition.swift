@@ -23,6 +23,9 @@ struct SpeechRecognition: AsyncParsableCommand {
     @Flag
     var onDevice: Bool = false
     
+    @Flag
+    var append: Bool = false
+    
     @Argument
     var output: String
     
@@ -30,6 +33,11 @@ struct SpeechRecognition: AsyncParsableCommand {
         var outputURL = URL(filePath: output)
         if !outputURL.isFileURL {
             outputURL.append(component: "output.txt")
+        }
+        if !append {
+            if FileManager.default.fileExists(atPath: outputURL.path()) {
+                try FileManager.default.removeItem(at: outputURL)
+            }
         }
         
         var outputStream = OutputStream(url: outputURL, append: true)!

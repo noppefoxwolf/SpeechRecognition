@@ -1,7 +1,7 @@
 # Usage
 
 ```
-USAGE: speech-recognition <file> [--locale <locale>] [--segent-length <segent-length>] [--on-device] <output>
+USAGE: speech-recognition <file> [--locale <locale>] [--segent-length <segent-length>] [--on-device] [--append] <output>
 
 ARGUMENTS:
   <file>
@@ -11,7 +11,8 @@ OPTIONS:
   --locale <locale>       (default: ja-JP)
   --segent-length <segent-length>
                           (default: 30)
-  --on-device             (default: true)
+  --on-device
+  --append
   -h, --help              Show help information.
 ```
 
@@ -28,7 +29,3 @@ swift package experimental-install
 ```
 swift package experimental-uninstall speech-recognition
 ```
-
-# Special Thanks
-
-https://github.com/nsscreencast/469-swift-command-line-progress-bar
