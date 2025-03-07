@@ -27,23 +27,29 @@ struct SpeechRecognition: AsyncParsableCommand {
     var output: String
     
     func run() async throws {
+        var outputURL = URL(filePath: output)
+        if !outputURL.isFileURL {
+            outputURL.append(component: "output.txt")
+        }
+        
+        var outputStream = OutputStream(url: outputURL, append: true)!
+        outputStream.open()
+        defer {
+            outputStream.close()
+        }
+        
         let recognizer = SpeechRecognitionCore.SpeechRecognition(
             url: URL(filePath: file),
             localeIdenitifier: locale,
             segmentDuration: Double(segentLength),
             requiresOnDeviceRecognition: onDevice
         )
-        let results = try await recognizer.results()
-        var outputURL = URL(filePath: output)
-        if !outputURL.isFileURL {
-            outputURL.append(component: "output.txt")
+        for try await result in recognizer.results() {
+            outputStream.write(result.description)
+            outputStream.write("\n")
         }
-        
-        let content = results
-            .map({ "\($0.timeRange.start.seconds): \($0.transcription)" })
-            .joined(separator: "\n")
-        try content.write(to: outputURL, atomically: true, encoding: .utf8)
         
         print("Saved: \(outputURL)")
     }
 }
+
