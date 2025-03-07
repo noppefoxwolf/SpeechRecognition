@@ -5,7 +5,7 @@ import Foundation
 @main
 struct CLI {
    static func main() async {
-      await SpeechRecognition.main()
+       await SpeechRecognition.main()
    }
 }
 

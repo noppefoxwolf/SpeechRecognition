@@ -8,13 +8,13 @@ package struct SpeechRecognitionResult: Sendable {
 }
 
 package struct SpeechRecognition {
-    let url: URL
+    let url: Foundation.URL
     let localeIdenitifier: String
     let segmentDuration: Double
     let requiresOnDeviceRecognition: Bool
     
     package init(
-        url: URL,
+        url: Foundation.URL,
         localeIdenitifier: String = "ja-JP",
         segmentDuration: Double = 60,
         requiresOnDeviceRecognition: Bool
@@ -38,10 +38,13 @@ package struct SpeechRecognition {
         )
         var currentStartTime = CMTime.zero
         var results: [SpeechRecognitionResult] = []
+        
+        var progressBar = ProgressBar(output: FileHandle.standardOutput)
 
         while currentStartTime < duration {
-            let progress = (CMTimeGetSeconds(currentStartTime) / CMTimeGetSeconds(duration)) * 100
-            print("\(String(format: "%.2f", progress))% complete")
+            let total = CMTimeGetSeconds(duration)
+            let step = CMTimeGetSeconds(currentStartTime)
+            progressBar.render(count: Int(step), total: Int(total))
             
             let currentEndTime = CMTimeMinimum(currentStartTime + segmentDuration, duration)
             let timeRange = CMTimeRange(start: currentStartTime, end: currentEndTime)
@@ -73,7 +76,8 @@ package struct SpeechRecognition {
 
             currentStartTime = currentEndTime
         }
-        print("🎉")
+        
+        progressBar.finish()
         
         return results
     }

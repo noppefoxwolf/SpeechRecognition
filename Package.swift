@@ -7,20 +7,18 @@ let package = Package(
     name: "SpeechRecognition",
     platforms: [.macOS(.v15)],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0")
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0"),
     ],
     targets: [
         .executableTarget(
-            name: "SpeechRecognition",
+            name: "speech-recognition",
             dependencies: [
-                "SpeechRecognitionCore"
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "SpeechRecognitionCore",
             ]
         ),
         .target(
-            name: "SpeechRecognitionCore",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
-            ]
+            name: "SpeechRecognitionCore"
         ),
     ]
 )

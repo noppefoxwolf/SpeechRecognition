@@ -26,5 +26,9 @@ swift package experimental-install
 ## Uninstall
 
 ```
-swift package experimental-uninstall SpeechRecognition
+swift package experimental-uninstall speech-recognition
 ```
+
+# Special Thanks
+
+https://github.com/nsscreencast/469-swift-command-line-progress-bar
