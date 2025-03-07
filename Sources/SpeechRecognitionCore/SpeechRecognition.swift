@@ -29,6 +29,7 @@ package struct SpeechRecognition {
         let asset = AVURLAsset(url: url)
         let locale = Locale(identifier: localeIdenitifier)
         let recognizer = SFSpeechRecognizer(locale: locale)!
+        recognizer.defaultTaskHint = .dictation
         
         let duration = try await asset.load(.duration)
         let segmentDuration = CMTime(
@@ -47,7 +48,8 @@ package struct SpeechRecognition {
 
             let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetAppleM4A)!
             exporter.timeRange = timeRange
-            let segmentURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("segment.m4a")
+            let segmentURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                .appendingPathComponent("segment.m4a")
 
             try? FileManager.default.removeItem(at: segmentURL)
             try await exporter.export(to: segmentURL, as: .m4a)
@@ -55,7 +57,6 @@ package struct SpeechRecognition {
             let request = SFSpeechURLRecognitionRequest(url: segmentURL)
             request.requiresOnDeviceRecognition = requiresOnDeviceRecognition
             request.shouldReportPartialResults = false
-            request.taskHint = .dictation
             
             do {
                 let transcription = try await recognizer.result(with: request)
