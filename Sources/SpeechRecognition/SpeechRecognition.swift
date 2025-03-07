@@ -21,7 +21,7 @@ struct SpeechRecognition: AsyncParsableCommand {
     var segentLength: Int = 30
     
     @Flag
-    var onDevice: Bool = true
+    var onDevice: Bool = false
     
     @Argument
     var output: String
